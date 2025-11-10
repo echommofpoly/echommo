@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoMMO - Home</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="home-container">
+    <!-- HEADER FRAGMENT -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/sidebar :: sidebar(activePage='home')}"></div>
+
+        <main class="main-content">
+            <section class="journey-section">
+                <div class="journey-bg"></div>
+                <h1 class="journey-title">🚀 Hành trình GameFi</h1>
+                <p id="journey-typing" class="journey-typing"></p>
+
+                <div class="progress-container">
+                    <div class="progress-label">Tiến trình nhân vật</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%;"></div>
+                    </div>
+                    <span class="progress-text">Level 45 / 100</span>
+                </div>
+
+                <div class="action-cards">
+                    <div class="quick-card" th:onclick="'location.href=\'' + @{/minigame} + '\''">
+                        <i class="fas fa-dragon"></i>
+                        <h3>Phiêu lưu</h3>
+                        <p>Tham gia chiến đấu và khám phá thế giới mới.</p>
+                    </div>
+                    <div class="quick-card" th:onclick="'location.href=\'' + @{/marketplace} + '\''">
+                        <i class="fas fa-store"></i>
+                        <h3>Marketplace</h3>
+                        <p>Mua bán vật phẩm quý hiếm với người chơi khác.</p>
+                    </div>
+                    <div class="quick-card" th:onclick="'location.href=\'' + @{/inventory} + '\''">
+                        <i class="fas fa-box-open"></i>
+                        <h3>Kho đồ</h3>
+                        <p>Quản lý trang bị và vật phẩm của bạn.</p>
+                    </div>
+                    <div class="quick-card" th:onclick="'location.href=\'' + @{/profile} + '\''">
+                        <i class="fas fa-user-cog"></i>
+                        <h3>Hồ sơ</h3>
+                        <p>Xem thông tin và nâng cấp nhân vật.</p>
+                    </div>
+                    <div class="quick-card" id="openFriendPanel">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>Bạn bè</h3>
+                        <p>Kết nối với bạn bè trong EchoMMO.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<!-- CHAT PANEL HTML (ĐÃ DI CHUYỂN RA NGOÀI HEADER) -->
+<div class="chat-panel" id="chatPanel">
+    <div class="chat-header">
+        <h3 id="chatFriendName">Chat với [Tên bạn bè]</h3>
+        <button id="closeChatPanel"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+        <div class="message-item friend">
+            <p>Chat đã sẵn sàng! Gửi tin nhắn đầu tiên!</p>
+            <span class="timestamp">15:00</span>
+        </div>
+    </div>
+    
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Gõ tin nhắn...">
+        <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+    <input type="hidden" id="currentReceiverUsername"> 
+</div>
+<!-- KẾT THÚC CHAT PANEL -->
+
+<script th:src="@{/js/common.js}"></script>
+<!-- 💡 LINK ĐẾN FILE JS ĐÃ FIX LỖI -->
+<script th:src="@{/js/header.js}"></script> 
+<script th:inline="javascript">
+    // ===== GÕ CHỮ ĐỘNG =====
+    const lines = [
+        "Khởi đầu chuyến phiêu lưu vĩ đại trong thế giới EchoMMO...",
+        "Chiến đấu, thu thập và chinh phục những vùng đất bí ẩn...",
+        "Vinh quang chỉ dành cho những chiến binh dũng cảm!"
+    ];
+    const el = document.getElementById("journey-typing");
+    let line = 0, char = 0;
+
+    function typingEffect() {
+        if (line < lines.length) {
+            if (char < lines[line].length) {
+                el.textContent += lines[line].charAt(char);
+                char++;
+                setTimeout(typingEffect, 40);
+            } else {
+                setTimeout(() => {
+                    el.textContent = "";
+                    char = 0;
+                    line++;
+                    typingEffect();
+                }, 1500);
+            }
+        } else {
+            line = 0;
+            setTimeout(typingEffect, 1000);
+        }
+    }
+    typingEffect();
+</script>
+</body>
+</html>

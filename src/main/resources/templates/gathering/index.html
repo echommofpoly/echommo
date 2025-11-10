@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Thu thập - EchoMMO</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/gathering.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="home-container">
+    <header class="header">
+        <div class="logo">Thu<span class="highlight">Thập</span></div>
+        <div class="nav-actions">
+            <div class="stats-bar">
+                <span><i class="fas fa-heart"></i> <span id="headerHp" th:text="${data.playerHp}">100</span></span>
+                <span><i class="fas fa-bolt"></i> <span id="headerEnergy" th:text="${data.playerEnergy}">50</span></span>
+                <span><i class="fas fa-coins"></i> <span id="headerGold" th:text="${data.playerGold}">0</span></span>
+            </div>
+            <button class="icon-btn" onclick="location.href='/minigame'">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content" style="padding: 2rem; max-width: 600px; margin: auto;">
+        <section class="gather-panel" th:data-resource-type="${data.resourceType}">
+            
+            <div class="gather-header">
+                <h1 style="font-size: 3rem; margin: 0;" th:text="${data.resourceIcon}">🪨</h1>
+                <h3 id="itemName" th:text="${data.resourceName}">Đá thô</h3>
+                <p class="requirement" th:text="${data.requirementText}">Yêu cầu cấp 1</p>
+            </div>
+
+            <ul class="gather-info-list">
+                <li class="info-row">
+                    <span>Cấp độ kỹ năng</span>
+                    <span class="info-value" id="gatherLv" th:text="${data.gatherLevel}">1</span>
+                </li>
+                <li class="info-row">
+                    <span>Dụng cụ</span>
+                    <span class="info-value" id="equippedTool">Tay không</span>
+                </li>
+            </ul>
+
+            <div class="progress-section">
+                <div class="progress-labels">
+                    <span>Kinh nghiệm</span>
+                    <span id="progressPercent" th:text="${#numbers.formatDecimal(data.expPercent, 1, 1) + '%'}">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" th:style="'width: ' + ${data.expPercent} + '%;'"></div>
+                </div>
+            </div>
+
+            <div class="gather-actions">
+                <button id="gatherBtn" class="btn">
+                    <i class="fas fa-hammer"></i> Thu thập
+                </button>
+                <button id="leaveBtn" class="btn btn-secondary" onclick="location.href='/minigame'">
+                    <i class="fas fa-times"></i> Rời đi
+                </button>
+            </div>
+
+            <p class="action-cost">Mỗi lần tốn <span id="energyCost" th:text="${data.energyCost}">5</span> Năng lượng.</p>
+
+            <div id="gatherLog" class="gather-log">Hãy bắt đầu...</div>
+        </section>
+    </main>
+</div>
+
+<script th:src="@{/js/gathering.js}"></script>
+</body>
+</html>

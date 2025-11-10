@@ -1,0 +1,137 @@
+<header class="header" xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+    <!-- LOGO -->
+    <a th:href="@{/}" class="logo">Echo<span class="highlight">MMO</span></a>
+
+    <!-- NAV & ACCOUNT -->
+    <div class="nav-actions">
+        <!-- Hiển thị số dư -->
+        <div th:if="${#authentication.principal instanceof T(com.poly.security.CustomUserDetails) 
+                     and #authentication.principal.getUser().wallet != null}" 
+             class="wallet-info">
+            <i class="fas fa-coins"></i>
+            <span id="headerGold"
+                  th:text="${#numbers.formatDecimal(#authentication.principal.getUser().wallet.balance, 1, 'COMMA', 2, 'POINT')}">
+                0.00
+            </span>
+        </div>
+
+        <div th:unless="${#authentication.principal instanceof T(com.poly.security.CustomUserDetails) 
+                        and #authentication.principal.getUser().wallet != null}" 
+             class="wallet-info">
+            <i class="fas fa-coins"></i>
+            <span id="headerGold">N/A</span>
+        </div>
+
+        <!-- Nút nhanh -->
+        <button class="icon-btn" title="Kho đồ" onclick="location.href='/inventory'">
+            <i class="fas fa-box"></i>
+        </button>
+
+        <button class="icon-btn" title="Bạn bè" id="openFriendPanelHeader">
+            <i class="fas fa-user-friends"></i>
+        </button>
+
+        <button class="icon-btn" title="Tin nhắn" onclick="location.href='/messages'">
+            <i class="fas fa-comments"></i>
+        </button>
+
+        <!-- MENU TÀI KHOẢN -->
+        <div class="account-menu">
+            <button type="button" class="account-btn icon-btn" aria-label="Account Menu">
+                <i class="fas fa-user"></i>
+            </button>
+            <div class="dropdown">
+                <a th:href="@{/profile}"><i class="fas fa-user-edit"></i> Hồ sơ</a>
+                <a th:href="@{/transactions}"><i class="fas fa-history"></i> Giao dịch</a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL BẠN BÈ -->
+    <div class="friend-panel" id="friendPanel">
+        <div class="friend-header">
+            <span>Danh sách bạn bè</span>
+            <button id="closeFriendPanel"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- TÌM KIẾM / THÊM BẠN -->
+        <div class="friend-search">
+            <form id="friendForm" onsubmit="event.preventDefault(); sendFriendRequest();">
+                <input type="text" id="friendUsername" name="username" placeholder="Nhập username..." required>
+                <button type="submit"><i class="fa-solid fa-user-plus"></i></button>
+            </form>
+            <p id="friendMessage" style="margin-top:5px; font-size:13px;"></p>
+        </div>
+
+        <div id="friendPanelContent">
+            <!-- LỜI MỜI ĐÃ NHẬN -->
+            <div id="pendingRequests">
+                <h4>Lời mời kết bạn đã nhận</h4>
+                <div th:if="${pendingRequests == null or pendingRequests.size() == 0}">
+                    <p>Không có lời mời nào.</p>
+                </div>
+                <ul>
+                    <li th:each="req : ${pendingRequests}">
+                        <span th:text="${req.user.username}">Username</span>
+                        <span style="color:gray;" th:text="'(' + ${req.status} + ')'"></span>
+                        <th:block th:if="${req.status.toUpperCase() == 'PENDING'}">
+                            <button th:attr="onclick='respondFriend(' + ${req.friendshipId} + ', true)'" class="accept-btn">✔️</button>
+                            <button th:attr="onclick='respondFriend(' + ${req.friendshipId} + ', false)'" class="reject-btn">❌</button>
+                        </th:block>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- LỜI MỜI ĐÃ GỬI -->
+            <div id="sentRequests">
+                <h4>Lời mời kết bạn đã gửi</h4>
+                <div th:if="${sentRequests == null or sentRequests.size() == 0}">
+                    <p>Không có lời mời nào đang chờ.</p>
+                </div>
+                <ul>
+                    <li th:each="req : ${sentRequests}">
+                        <span th:text="${req.friendUser.username}">Người nhận</span>
+                        <span style="color:gray;">(Đang chờ)</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- DANH SÁCH BẠN BÈ -->
+            <div id="friendList">
+                <h4>Bạn bè</h4>
+                <div th:if="${friendList == null or friendList.size() == 0}">
+                    <p>Chưa có bạn bè nào.</p>
+                </div>
+                <ul>
+                    <li th:each="f : ${friendList}"
+                        th:with="
+                            user1=${f.user}, 
+                            user2=${f.friendUser},
+                            friendObj=${user1 != null and user1.username == currentUsername ? user2 : user1},
+                            friendName=${friendObj != null ? friendObj.username : '[Lỗi User]'}">
+
+                        <span th:text="${friendName}" style="flex-grow: 1;"></span>
+
+                        <th:block th:if="${f.status == 'ACCEPTED'}" class="action-buttons">
+                            <!-- ✅ SỬA LẠI ONCLICK ĐÚNG CHUẨN THYMELEAF -->
+                            <button th:attr="onclick='openChat(\'' + ${friendName} + '\')'" class="chat-btn" title="Nhắn tin">
+                                <i class="fas fa-comment"></i>
+                            </button>
+
+                            <button th:attr="onclick='deleteFriend(' + ${f.friendshipId} + ')'" class="delete-friend-btn" title="Xóa bạn">
+                                <i class="fas fa-user-times"></i>
+                            </button>
+                        </th:block>
+
+                        <span style="color:red;" th:if="${f.status == 'REJECTED'}">(Đã từ chối)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

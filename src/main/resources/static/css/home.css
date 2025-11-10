@@ -1,0 +1,199 @@
+/* ===================== BODY ===================== */
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0f172a 0%, #1f2937 100%);
+    font-family: "Poppins", Arial, sans-serif;
+    color: white;
+    height: 100vh;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.layout {
+    display: flex;
+    flex: 1;
+}
+
+/* ===================== SIDEBAR (giữ nguyên) ===================== */
+.sidebar {
+    width: 20%;
+    background-color: #1f2937;
+    border-right: 1px solid #374151;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    color: #10b981;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar a {
+    display: block;
+    color: #d1d5db;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #10b981;
+    color: #fff;
+}
+
+/* ===================== MAIN CONTENT ===================== */
+.main-content {
+    width: 80%;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+/* ===================== JOURNEY SECTION ===================== */
+.journey-section {
+    text-align: center;
+    position: relative;
+    padding: 50px 20px;
+    border-radius: 16px;
+    background: radial-gradient(circle at center, rgba(16,185,129,0.08), rgba(0,0,0,0.3));
+    overflow: hidden;
+}
+
+.journey-bg {
+    position: absolute;
+    inset: 0;
+    background: repeating-radial-gradient(circle at center, rgba(16,185,129,0.2) 0%, transparent 70%);
+    animation: spinGlow 12s linear infinite;
+    z-index: 0;
+}
+
+@keyframes spinGlow {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(360deg) scale(1.05); }
+}
+
+.journey-title {
+    font-size: 2em;
+    color: #10b981;
+    text-shadow: 0 0 15px rgba(16,185,129,0.8);
+    position: relative;
+    z-index: 1;
+}
+
+.journey-typing {
+    font-size: 1.1em;
+    color: #9ca3af;
+    min-height: 24px;
+    margin-top: 10px;
+    z-index: 1;
+    position: relative;
+}
+
+.journey-typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+    color: #10b981;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* ===================== PROGRESS BAR ===================== */
+.progress-container {
+    margin-top: 25px;
+    position: relative;
+    z-index: 1;
+}
+
+.progress-label {
+    color: #9ca3af;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    width: 70%;
+    height: 10px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+.progress-text {
+    display: block;
+    margin-top: 8px;
+    color: #d1d5db;
+}
+
+/* ===================== ACTION CARDS ===================== */
+.action-cards {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+    z-index: 1;
+    position: relative;
+}
+
+.quick-card {
+    background: #1f2937;
+    border: 1px solid #374151;
+    padding: 1.8rem;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+}
+
+.quick-card:hover {
+    transform: translateY(-6px);
+    border-color: #10b981;
+    box-shadow: 0 10px 25px rgba(16,185,129,0.2);
+}
+
+.quick-card i {
+    font-size: 2.2rem;
+    color: #10b981;
+    margin-bottom: 0.8rem;
+}
+
+.quick-card h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1em;
+}
+
+.quick-card p {
+    color: #9ca3af;
+    font-size: 0.9em;
+    margin-top: 6px;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1024px) {
+    .layout {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        border-bottom: 1px solid #374151;
+    }
+    .main-content {
+        width: 100%;
+        padding: 20px;
+    }
+}

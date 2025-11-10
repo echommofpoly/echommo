@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - EchoMMO</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="profile-container">
+    <header class="header">
+        <h1><i class="fas fa-user-circle"></i> Thông tin cá nhân</h1>
+        <a th:href="@{/}" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
+    </header>
+
+    <div th:if="${message}" class="alert success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+
+    <!-- Form cập nhật thông tin -->
+    <section class="profile-card">
+        <form th:action="@{/profile/update}" method="post" th:object="${user}">
+            <h2>Cập nhật thông tin</h2>
+
+            <label>Họ tên:</label>
+            <!-- FIX: Đổi từ full_name sang fullName -->
+            <input type="text" th:field="*{fullName}" placeholder="Nhập họ tên">
+
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" placeholder="Nhập email">
+
+            <button type="submit">Lưu thay đổi</button>
+        </form>
+    </section>
+
+    <!-- Form đổi mật khẩu -->
+    <section class="password-card">
+        <form th:action="@{/profile/change-password}" method="post">
+            <h2>Đổi mật khẩu</h2>
+
+            <label>Mật khẩu hiện tại:</label>
+            <input type="password" name="oldPassword" required>
+
+            <label>Mật khẩu mới:</label>
+            <input type="password" name="newPassword" required>
+
+            <label>Xác nhận mật khẩu mới:</label>
+            <input type="password" name="confirmPassword" required>
+
+            <button type="submit" class="danger">Đổi mật khẩu</button>
+        </form>
+    </section>
+</div>
+</body>
+</html>

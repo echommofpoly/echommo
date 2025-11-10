@@ -1,0 +1,130 @@
+/* css/gather.css - Giao diện trang thu thập */
+:root {
+    --bg-card: #1f2937;
+    --bg-dark: #111827;
+    --text-muted: #9ca3af;
+    --primary: #10b981;
+    --warning: #f59e0b;
+}
+
+.gather-panel {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* Phần header (Icon, Tên, Yêu cầu) */
+.gather-header {
+  text-align: center;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+.gather-header h3 {
+  margin: 5px 0;
+  font-size: 1.5em;
+  color: #fff;
+}
+.gather-header .requirement {
+  color: var(--text-muted);
+  font-size: 0.9em;
+}
+
+/* Danh sách thông tin */
+.gather-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid #374151;
+  font-size: 1.1em;
+  color: #ddd;
+}
+.info-row:last-child {
+  border-bottom: none;
+}
+.info-row .info-value {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+/* Khu vực thanh tiến trình */
+.progress-section {
+  margin: 20px 0;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  margin-bottom: 8px;
+}
+.progress-bar {
+  background: var(--bg-dark);
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #111;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%; /* Sẽ được cập nhật bởi JS */
+  background: var(--primary);
+  transition: width 0.3s;
+}
+
+/* Nút bấm và chi phí */
+.gather-actions {
+  text-align: center;
+  margin-top: 20px;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+#gatherBtn {
+  background: var(--primary);
+  color: white;
+  font-size: 1.1em;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#gatherBtn:hover {
+  background: #0f9f7a;
+}
+#gatherBtn:disabled {
+  background: #333;
+  color: #777;
+  cursor: not-allowed;
+}
+.btn-secondary {
+    background: #4b5563;
+    color: #fff;
+}
+.action-cost {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+/* Log */
+.gather-log {
+  margin-top: 15px;
+  background: var(--bg-dark);
+  padding: 10px;
+  border-radius: 8px;
+  min-height: 24px;
+  color: var(--primary);
+  text-align: center;
+  font-size: 0.95em;
+}

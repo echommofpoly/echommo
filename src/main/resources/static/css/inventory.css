@@ -1,0 +1,141 @@
+/* static/css/inventory.css */
+
+.inventory-tabs {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    gap: 0.5rem; /* Giảm gap */
+    margin-bottom: 1.5rem; /* Giảm margin */
+    background: var(--bg-card);
+    padding: 0.75rem; /* Giảm padding */
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+}
+.tab-btn { /* Style chung cho tab button */
+   background: var(--secondary);
+   color: var(--text-light);
+   padding: 8px 15px;
+   border: none;
+   border-radius: var(--border-radius-sm);
+   cursor: pointer;
+   transition: background 0.3s;
+   font-weight: bold;
+}
+.tab-btn.active {
+   background: var(--primary);
+   color: white;
+}
+.tab-btn:hover:not(.active) {
+    background: var(--secondary-hover);
+}
+
+
+.inventory-grid {
+    display: grid;
+    /* Điều chỉnh số cột và minmax cho phù hợp */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.inventory-item {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: all 0.3s;
+    border: 1px solid var(--border-color);
+    display: flex; /* Dùng flexbox cho card */
+    flex-direction: column;
+}
+
+.inventory-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color); /* Tăng shadow */
+    border-color: var(--primary);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 0.5rem 1rem; /* Giảm padding */
+    background: var(--bg-dark); /* Màu nền tối hơn */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-image {
+    position: relative;
+    height: 160px; /* Giảm chiều cao */
+    background: linear-gradient(145deg, #2d3748, var(--bg-dark)); /* Gradient nền */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.item-image img {
+    max-width: 90px; /* Giảm kích thước ảnh */
+    max-height: 90px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); /* Thêm bóng đổ nhẹ */
+}
+
+.equipped-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(16, 185, 129, 0.7); /* Giảm độ mờ */
+    display: flex;
+    flex-direction: column; /* Icon trên chữ */
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9em;
+    opacity: 0; /* Ẩn ban đầu */
+    transition: opacity 0.3s;
+}
+.inventory-item:hover .equipped-overlay { /* Hiện khi hover item cha */
+     opacity: 1;
+}
+.equipped-overlay i {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+}
+
+
+.item-info {
+    padding: 1rem;
+    flex-grow: 1; /* Cho phép phần info co giãn */
+}
+
+.item-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem; /* Tăng nhẹ font */
+    color: var(--text-light);
+    white-space: nowrap; /* Ngăn xuống dòng */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Thêm ... nếu quá dài */
+}
+
+.item-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    /* Giới hạn số dòng hiển thị description nếu cần */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Số dòng tối đa */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.5em; /* Đảm bảo có chỗ cho 2 dòng */
+}
+
+.item-actions {
+    padding: 0 1rem 1rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Cho phép nút xuống dòng */
+    margin-top: auto; /* Đẩy action xuống dưới cùng */
+}
+
+.item-actions button {
+    flex: 1 1 auto; /* Cho phép nút co giãn nhưng giữ kích thước tối thiểu */
+    min-width: 80px; /* Kích thước tối thiểu */
+}

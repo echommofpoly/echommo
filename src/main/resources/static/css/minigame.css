@@ -1,0 +1,229 @@
+	/* ================== Biến màu chủ đạo ================== */
+	:root {
+	    --primary: #00b4d8;
+	    --secondary: #38bdf8;
+	    --warning: #f59e0b;
+	    --info: #3b82f6;
+	    --text-light: #f9fafb;
+	    --text-muted: #9ca3af;
+	    --bg-card: #1e293b;
+	    --bg-dark: #0f172a;
+	    --border-color: rgba(255, 255, 255, 0.1);
+	    --radius-md: 12px;
+	    --radius-lg: 20px;
+	}
+	
+	/* ================== Toàn trang ================== */
+	body {
+	    margin: 0;
+	    font-family: "Poppins", sans-serif;
+	    background: radial-gradient(circle at center, #0a0a1a 0%, #050515 100%);
+	    color: var(--text-light);
+	    min-height: 100vh;
+	}
+	
+	/* ================== Header ================== */
+	.header {
+	    background: linear-gradient(90deg, #0f172a, #1e293b);
+	    padding: 1rem 2rem;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+	    position: sticky;
+	    top: 0;
+	    z-index: 10;
+	}
+	
+	.logo {
+	    font-size: 1.6em;
+	    font-weight: bold;
+	    color: var(--primary);
+	}
+	
+	.logo .highlight {
+	    color: var(--secondary);
+	}
+	
+	/* ================== Sidebar ================== */
+	.sidebar {
+	    width: 220px;
+	    background: linear-gradient(180deg, #0b1739 0%, #102a49 100%);
+	    padding: 2rem 1rem;
+	    border-right: 1px solid rgba(0, 255, 255, 0.1);
+	    min-height: 100vh;
+	    box-shadow: 0 0 25px rgba(0, 180, 216, 0.3);
+	}
+	
+	.sidebar h3 {
+	    color: #00d9ff;
+	    margin-bottom: 1rem;
+	    font-size: 1.1rem;
+	    border-bottom: 1px solid rgba(0,255,255,0.2);
+	    padding-bottom: 0.5rem;
+	    text-shadow: 0 0 10px rgba(0,255,255,0.4);
+	}
+	
+	.sidebar ul {
+	    list-style: none;
+	    padding: 0;
+	    margin: 0;
+	}
+	
+	.sidebar ul li {
+	    margin-bottom: 1rem;
+	}
+	
+	.sidebar ul li a {
+	    display: flex;
+	    align-items: center;
+	    gap: 0.6rem;
+	    text-decoration: none;
+	    color: #b0c4de;
+	    padding: 0.6rem 1rem;
+	    border-radius: 12px;
+	    transition: all 0.3s ease;
+	    background: rgba(255,255,255,0.02);
+	}
+	
+	.sidebar ul li a:hover,
+	.sidebar ul li a.active {
+	    background: linear-gradient(90deg, #00b4d8, #38bdf8);
+	    color: #fff;
+	    box-shadow: 0 0 20px rgba(0,180,216,0.6);
+	    transform: translateX(3px);
+	}
+	
+	/* ================== Layout chính ================== */
+	.layout {
+	    display: flex;
+	}
+	
+	/* ================== Main Content ================== */
+	.main-content {
+	    flex: 1;
+	    padding: 2rem;
+	    animation: fadeIn 0.5s ease-in-out;
+	}
+	
+	@keyframes fadeIn {
+	    from { opacity: 0; transform: translateY(10px); }
+	    to { opacity: 1; transform: translateY(0); }
+	}
+	
+	/* ================== Khu vực Minigame ================== */
+	.minigame-container {
+	    text-align: center;
+	    max-width: 900px;
+	    margin: 0 auto;
+	}
+	
+	h1 {
+	    font-size: 2rem;
+	    margin-bottom: 1rem;
+	    color: var(--primary);
+	}
+	
+	.character-panel {
+	    background: var(--bg-card);
+	    padding: 1.5rem 2rem;
+	    border-radius: var(--radius-lg);
+	    margin-bottom: 2rem;
+	    border: 1px solid var(--border-color);
+	    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+	}
+	
+	.character-panel h2 {
+	    color: var(--primary);
+	    font-size: 1.3rem;
+	    margin-bottom: 1rem;
+	}
+	
+	.char-stats {
+	    display: flex;
+	    gap: 2rem;
+	    justify-content: center;
+	}
+	
+	.stat-item span:first-child {
+	    color: var(--text-muted);
+	    font-size: 0.9em;
+	    display: block;
+	    margin-bottom: 0.3rem;
+	}
+	
+	.stat-item span:last-child {
+	    color: #fff;
+	    font-size: 1.4em;
+	    font-weight: 600;
+	}
+	
+	/* ================== Game Playground ================== */
+	.playground {
+	    position: relative;
+	    width: 600px;
+	    height: 220px;
+	    background: linear-gradient(180deg, #0a0a1a 0%, #151540 100%);
+	    border: 2px solid #00b4d8;
+	    border-radius: var(--radius-lg);
+	    overflow: hidden;
+	    margin: 30px auto;
+	    box-shadow: 0 0 25px rgba(0,180,216,0.3);
+	}
+	
+	.character {
+	    position: absolute;
+	    bottom: 20px;
+	    left: 48px;
+	    font-size: 2.5rem;
+	    transition: all 0.9s ease;
+	    text-shadow: 0 0 15px #1effff;
+	}
+	
+	.access {
+	    position: absolute;
+	    bottom: 20px;
+	    left: 400px;
+	    font-size: 2.2rem;
+	    opacity: 0;
+	    transition: all 0.8s ease;
+	}
+	
+	/* ================== Nút điều khiển ================== */
+	.game-controls {
+	    display: flex;
+	    justify-content: center;
+	    gap: 1rem;
+	    flex-wrap: wrap;
+	    margin-bottom: 1rem;
+	}
+	
+	.btn {
+	    background: linear-gradient(90deg, #0044ff, #00d4ff);
+	    border: none;
+	    color: #fff;
+	    padding: 10px 18px;
+	    border-radius: var(--radius-md);
+	    cursor: pointer;
+	    transition: 0.2s;
+	    margin: 6px;
+	    font-weight: bold;
+	    box-shadow: 0 0 10px rgba(0,180,216,0.4);
+	}
+	
+	.btn:hover {
+	    transform: translateY(-2px);
+	    filter: brightness(1.2);
+	}
+	
+	.btn-adventure { background: linear-gradient(90deg, #00b4d8, #38bdf8); }
+	.btn-gather { background: linear-gradient(90deg, #f59e0b, #fbbf24); color: #222; }
+	.btn-rest { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+	
+	.message-box {
+	    margin-top: 10px;
+	    font-size: 1.1rem;
+	    color: #0ff;
+	    min-height: 30px;
+	    text-align: center;
+	}

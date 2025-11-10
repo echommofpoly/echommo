@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Minigame - EchoMMO</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/minigame.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="home-container">
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">Echo<span class="highlight">MMO</span></div>
+        <div class="nav-actions">
+            <div class="stats-bar">
+                <span><i class="fas fa-heart"></i> HP: <span id="playerHp" th:text="${character?.health ?: 100}">100</span></span>
+                <span><i class="fas fa-bolt"></i> Energy: <span id="playerEnergy" th:text="${character?.energy ?: 50}">50</span></span>
+                <span><i class="fas fa-coins"></i> Gold: <span id="playerGold" th:text="${user?.wallet?.balance ?: 0}">0</span></span>
+            </div>
+            <button class="icon-btn" onclick="location.href='/'"><i class="fas fa-home"></i></button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Menu</h3>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Trang chủ</a></li>
+                <li><a href="/marketplace"><i class="fas fa-store"></i> Marketplace</a></li>
+                <li><a href="/inventory"><i class="fas fa-box"></i> Kho đồ</a></li>
+                <li><a href="/minigame" class="active"><i class="fas fa-gamepad"></i> Minigame</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+            <div class="minigame-container">
+                <h1><i class="fas fa-gamepad"></i> Phiêu Lưu</h1>
+
+                <!-- Character Info -->
+                <div class="character-panel">
+                    <h2>Nhân vật của bạn</h2>
+                    <div class="char-stats">
+                        <div class="stat-item"><span>Level:</span><span th:text="${character?.level ?: 1}">1</span></div>
+                        <div class="stat-item"><span>ATK:</span><span th:text="${character?.atk ?: 10}">10</span></div>
+                        <div class="stat-item"><span>DEF:</span><span th:text="${character?.def ?: 5}">5</span></div>
+                    </div>
+                </div>
+
+                <!-- Game Zone -->
+                <div class="game-area">
+                    <div class="playground" id="playground">
+                        <div class="character" id="character">🧙‍♂️</div>
+                        <div class="access" id="access">🏝️</div>
+                    </div>
+
+                    <div class="game-controls">
+                        <button id="adventureBtn" class="btn btn-adventure"><i class="fas fa-walking"></i> Phiêu lưu</button>
+                        <button id="gatherBtn" class="btn btn-gather"><i class="fas fa-hammer"></i> Thu thập</button>
+                        <button id="restBtn" class="btn btn-rest"><i class="fas fa-bed"></i> Nghỉ ngơi</button>
+                    </div>
+
+                    <div id="messageBox" class="message-box"></div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="btn btn-potion" onclick="useQuickPotion()"><i class="fas fa-flask"></i> Dùng Potion</button>
+                    <button class="btn" onclick="location.href='/inventory'"><i class="fas fa-box"></i> Kho đồ</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- JS Data -->
+<script th:inline="javascript">
+    const CHARACTER_DATA = /*[[${character}]]*/ null ? {
+        id: /*[[${character.characterId}]]*/ null,
+        name: /*[[${character.name}]]*/ 'Player',
+        level: /*[[${character.level}]]*/ 1,
+        health: /*[[${character.health}]]*/ 100,
+        energy: /*[[${character.energy}]]*/ 50
+    } : { id: null, name: 'Player', level: 1, health: 100, energy: 50 };
+
+    const USER_DATA = { gold: /*[[${user?.wallet?.balance ?: 0.00}]]*/ 0.00 };
+</script>
+
+<script th:src="@{/js/minigame.js}"></script>
+</body>
+</html>
