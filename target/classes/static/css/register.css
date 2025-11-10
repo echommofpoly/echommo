@@ -1,0 +1,158 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+}
+
+body {
+    background: #111;
+    overflow: hidden;
+}
+
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Hiệu ứng vòng neon */
+.ring {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ring i {
+    position: absolute;
+    inset: 0;
+    border: 2px solid #fff;
+    transition: 0.5s;
+}
+
+.ring i:nth-child(1) {
+    border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+    animation: animate 6s linear infinite;
+}
+
+.ring i:nth-child(2) {
+    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+    animation: animate 4s linear infinite;
+}
+
+.ring i:nth-child(3) {
+    border-radius: 41% 44% 56% 59%/38% 62% 63% 37%;
+    animation: animate2 10s linear infinite;
+}
+
+.ring:hover i {
+    border: 6px solid var(--clr);
+    filter: drop-shadow(0 0 20px var(--clr));
+}
+
+@keyframes animate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes animate2 {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Form đăng ký */
+.register-box {
+    position: absolute;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.register-box h2 {
+    font-size: 2em;
+    color: #fff;
+}
+
+.register-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inputBx {
+    width: 100%;
+}
+
+.inputBx input {
+    width: 100%;
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 40px;
+    font-size: 1.1em;
+    color: #fff;
+    outline: none;
+    transition: 0.3s;
+}
+
+.inputBx input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(45deg, #ff357a, #fff172);
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1.1em;
+}
+
+.btn-submit:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.links {
+    width: 100%;
+    text-align: center;
+}
+
+.links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.links a:hover {
+    color: #ff357a;
+}
+
+/* Thông báo lỗi */
+.message-box {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.error {
+    color: #fff;
+    background-color: #e53935;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Thêm th:fragment ở đây -->
+    <aside th:fragment="sidebar(activePage)" class="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li>
+                <a th:href="@{/}" th:classappend="${activePage == 'home' ? 'active' : ''}">
+                    <i class="fas fa-home"></i> Trang chủ
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/marketplace}" th:classappend="${#strings.startsWith(activePage, 'marketplace') or activePage == 'my-listings' or activePage == 'create-listing' ? 'active' : ''}">
+                    <i class="fas fa-store"></i> Marketplace
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/inventory}" th:classappend="${activePage == 'inventory' ? 'active' : ''}">
+                    <i class="fas fa-box"></i> Kho đồ
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/minigame}" th:classappend="${#strings.startsWith(activePage, 'minigame') or #strings.startsWith(activePage, 'gathering') or #strings.startsWith(activePage, 'battle') ? 'active' : ''}">
+                    <i class="fas fa-gamepad"></i> Phiêu lưu
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/profile}" th:classappend="${activePage == 'profile' ? 'active' : ''}">
+                    <i class="fas fa-user-circle"></i> Hồ sơ
+                </a>
+            </li>
+        </ul>
+    </aside>
+</body>
+</html>

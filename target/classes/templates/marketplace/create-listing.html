@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng bán - EchoMMO</title>
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/inventory.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <style>
+         .create-listing-container { background: var(--bg-card); padding: 2rem; border-radius: 12px; max-width: 700px; margin: 2rem auto;}
+         .listing-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #374151; padding-bottom: 1rem;}
+         .tab-btn { background: #374151; color: #d1d5db; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.3s; font-size: 1em; }
+         .tab-btn.active { background: #10b981; color: white; }
+         .tab-content { display: none; }
+         .tab-content.active { display: block; animation: fadeIn 0.5s; }
+
+         .form-group { margin-bottom: 1.5rem; }
+         .form-group label { display: block; margin-bottom: 0.5rem; color: #a0aec0; font-weight: bold; }
+         .form-input { width: 100%; padding: 10px 15px; border-radius: 6px; border: 1px solid #374151; background: #1f2937; color: white; font-size: 1em; }
+         .form-input:focus { outline: none; border-color: #10b981; }
+
+         .btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; transition: background 0.3s; font-weight: bold; font-size: 1em; }
+         .btn-lg { padding: 12px 25px; font-size: 1.1em; }
+         .btn-primary { background: #3b82f6; color: white; } .btn-primary:hover { background: #2563eb; }
+         .btn-success { background: #10b981; color: white; } .btn-success:hover { background: #059669; }
+         .btn-admin { background: #ef4444; color: white; } .btn-admin:hover { background: #dc2626; }
+         .btn-select { background: #4b5563; color: white; margin-bottom: 10px; } .btn-select:hover { background: #6b7280; }
+         .btn-secondary { background: #6b7280; color: white; } .btn-secondary:hover { background: #4b5563; }
+
+         .selected-item { margin-top: 1rem; padding: 1rem; background: #1f2937; border-radius: 8px; border: 1px solid #374151; display: none; }
+         .selected-item.show { display: block; }
+         .selected-item h4 { margin: 0 0 5px 0; color: #10b981;}
+         .selected-item p { margin: 3px 0; font-size: 0.9em; color: #a0aec0;}
+
+         .estimate-box { margin-top: 1rem; padding: 1rem; background: #1f2937; border-radius: 8px; border: 1px dashed #f59e0b; display: none; text-align: center; }
+         .estimate-box.show { display: block; }
+
+         .info-box { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+         .info-box i { font-size: 1.5rem; }
+         .info-box p { margin: 0; }
+         .info-player { background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; color: #93c5fd; }
+         .info-system { background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; color: #6ee7b7; }
+         .info-admin { background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; color: #fca5a5; }
+
+         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); animation: fadeInModal 0.3s; }
+         .modal.show { display: flex; align-items: center; justify-content: center; }
+         .modal-content { background-color: #1e293b; margin: auto; padding: 25px; border: 1px solid #374151; width: 80%; max-width: 600px; border-radius: 12px; position: relative; }
+         .modal-close { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1;}
+         .modal-close:hover, .modal-close:focus { color: #fff; text-decoration: none; }
+         .item-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; max-height: 400px; overflow-y: auto; margin-top: 1rem; }
+         .item-list-item { background: #2d3748; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer; transition: background 0.3s; position: relative; border: 1px solid #374151;}
+         .item-list-item:hover { background: #4a5568; }
+         .item-list-item img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px; }
+         .item-list-item h4 { font-size: 0.9em; margin: 5px 0; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+         .item-list-item p { font-size: 0.8em; color: #a0aec0; margin: 0; }
+         .item-list-item .rarity-badge { position: absolute; top: 5px; left: 5px; font-size: 0.7em; padding: 1px 5px; }
+         .rarity-badge { padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); display: inline-block;}
+         .rarity-common { background: #9ca3af; }
+         .rarity-rare { background: #3b82f6; }
+         .rarity-epic { background: #a855f7; }
+         .rarity-legendary { background: #f59e0b; }
+
+         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+     </style>
+</head>
+<body>
+<div class="home-container">
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="layout">
+         <div th:replace="~{fragments/sidebar :: sidebar (activePage='marketplace')}"></div>
+
+        <main class="main-content">
+            <div class="create-listing-container">
+                <h1><i class="fas fa-plus-circle"></i> Đăng bán vật phẩm</h1>
+
+                <div class="listing-tabs">
+                    <button class="tab-btn active" onclick="switchTab('player')">Bán cho Player</button>
+                    <button class="tab-btn" onclick="switchTab('system')">Bán cho Hệ thống</button>
+                    <button class="tab-btn" sec:authorize="hasRole('ADMIN')" onclick="switchTab('admin')">Admin Listing</button>
+                </div>
+
+                <div id="player-tab" class="tab-content active">
+                     <div class="info-box info-player">
+                         <i class="fas fa-users"></i>
+                         <p>Đăng bán vật phẩm lên chợ để người chơi khác mua. Nhận 95% giá trị sau khi bán (5% phí).</p>
+                     </div>
+                    <form id="playerListingForm">
+                        <div class="form-group">
+                            <label>Chọn vật phẩm:</label>
+                            <button type="button" class="btn btn-select" onclick="selectItemFromInventory('player')">
+                                <i class="fas fa-box"></i> Chọn từ kho
+                            </button>
+                            <input type="hidden" id="player-itemId" name="itemId" required>
+                            <div id="player-selected" class="selected-item">
+                                 <div th:if="${param.itemId}" style="display: flex; align-items: center; gap: 1rem;">
+                                    <img src="/images/items/default.png" style="width: 50px; height: 50px; object-fit: contain;" alt="Item Image">
+                                    <div>
+                                         <h4 th:text="${param.itemName ?: 'Vật phẩm đã chọn'}">Item Name</h4>
+                                         <p>Có sẵn: <span th:text="${param.maxQty ?: '?'}">?</span></p>
+                                         </div>
+                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số lượng:</label>
+                            <input type="number" id="player-quantity" name="quantity" min="1" required class="form-input" th:value="${param.quantity ?: 1}" th:max="${param.maxQty}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giá bán (vàng):</label>
+                            <input type="number" id="player-price" name="price" min="0.01" step="0.01" required class="form-input">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-check"></i> Đăng bán
+                        </button>
+                    </form>
+                </div>
+
+                <div id="system-tab" class="tab-content">
+                    <div class="info-box info-system">
+                        <i class="fas fa-server"></i>
+                        <p>Bán vật phẩm trực tiếp cho hệ thống với giá bằng 70% giá gốc. Nhận tiền ngay lập tức!</p>
+                    </div>
+
+                    <form id="systemSaleForm">
+                        <div class="form-group">
+                            <label>Chọn vật phẩm:</label>
+                            <button type="button" class="btn btn-select" onclick="selectItemFromInventory('system')">
+                                <i class="fas fa-box"></i> Chọn từ kho
+                            </button>
+                            <input type="hidden" id="system-itemId" name="itemId" required>
+                            <div id="system-selected" class="selected-item"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số lượng:</label>
+                            <input type="number" id="system-quantity" name="quantity" min="1" required class="form-input">
+                        </div>
+
+                        <div id="system-estimate" class="estimate-box"></div>
+
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-dollar-sign"></i> Bán ngay
+                        </button>
+                    </form>
+                </div>
+
+                <div id="admin-tab" class="tab-content" sec:authorize="hasRole('ADMIN')">
+                    <div class="info-box info-admin">
+                        <i class="fas fa-crown"></i>
+                        <p>Tạo listing của Admin (giá cố định) để bán vật phẩm không giới hạn cho người chơi.</p>
+                    </div>
+
+                    <form id="adminListingForm">
+                        <div class="form-group">
+                            <label>Chọn vật phẩm (Từ hệ thống):</label>
+                            <input type="number" id="admin-itemId-input" placeholder="Nhập Item ID" class="form-input" style="max-width: 200px; display: inline-block; margin-right: 10px;">
+                             <button type="button" class="btn btn-secondary" onclick="adminSelectItemById()">Chọn Item</button>
+                            <input type="hidden" id="admin-itemId" name="itemId" required>
+                            <div id="admin-selected" class="selected-item"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số lượng (Thường là 1 cho loại này):</label>
+                            <input type="number" id="admin-quantity" name="quantity" value="1" min="1" required class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giá bán (vàng):</label>
+                            <input type="number" id="admin-price" name="price" min="0.01" step="0.01" required class="form-input">
+                        </div>
+
+                        <button type="submit" class="btn btn-admin btn-lg">
+                            <i class="fas fa-check"></i> Tạo Admin Listing
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+     <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<div id="itemModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h2>Chọn vật phẩm từ kho</h2>
+        <div id="itemList" class="item-list"></div>
+    </div>
+</div>
+
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/create-listing.js}"></script>
+<script th:src="@{/js/header.js}"></script>
+ <script>
+     document.addEventListener('DOMContentLoaded', () => {
+         const urlParams = new URLSearchParams(window.location.search);
+         const itemId = urlParams.get('itemId');
+         const maxQty = urlParams.get('maxQty');
+
+         if (itemId && document.getElementById('player-tab').classList.contains('active')) {
+             document.getElementById('player-itemId').value = itemId;
+             if(maxQty) {
+                 document.getElementById('player-quantity').max = maxQty;
+                 const selectedDiv = document.getElementById('player-selected');
+                 if(selectedDiv.querySelector('p:nth-child(2)')) {
+                      selectedDiv.querySelector('p:nth-child(2)').textContent = `Có sẵn: ${maxQty}`;
+                 }
+                 selectedDiv.classList.add('show');
+             }
+         }
+     });
+
+      async function adminSelectItemById() {
+          const itemIdInput = document.getElementById('admin-itemId-input');
+          const itemId = parseInt(itemIdInput.value);
+          if (!itemId || itemId <= 0) {
+              alert('Vui lòng nhập Item ID hợp lệ.');
+              return;
+          }
+
+          const item = { itemId: itemId, name: `Item ${itemId}`, basePrice: 100, imageUrl: null };
+
+          selectedItem = item;
+          currentTab = 'admin';
+
+          document.getElementById('admin-itemId').value = item.itemId;
+          const selectedDiv = document.getElementById('admin-selected');
+          selectedDiv.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                  <img src="${item.imageUrl || '/images/items/default.png'}" style="width: 50px; height: 50px; object-fit: contain;" alt="${item.name}">
+                  <div>
+                      <h4>${item.name}</h4>
+                      <p>ID: ${item.itemId}</p>
+                      <p>Giá gốc: ${item.basePrice} vàng</p>
+                  </div>
+              </div>
+          `;
+          selectedDiv.classList.add('show');
+           document.getElementById('admin-quantity').value = 1;
+      }
+ </script>
+</body>
+</html>

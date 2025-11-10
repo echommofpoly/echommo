@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Chiến đấu - EchoMMO</title>
+    <link rel.stylesheet th:href="@{/css/header.css}">
+    <link rel.stylesheet th:href="@{/css/battle.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="home-container">
+    <header class="header">
+        <div class.logo">Trận<span class.highlight">Chiến</span></div>
+    </header>
+
+    <main class.main-content" style="padding: 2rem; max-width: 600px; margin: auto;">
+        
+        <section class="battle-container" 
+                 th:data-enemy-id="${data.enemyId}"
+                 th:data-player-hp="${data.playerHp}"
+                 th:data-enemy-hp="${data.enemyHp}">
+
+            <div class="battle-area">
+                <div class="hp-row">
+                    <div class="hp-block player-block">
+                        <div id="playerHPText" th:text="'HP: ' + ${data.playerHp} + '/' + ${data.playerMaxHp}">HP: 100/100</div>
+                        <div class="hp-bar">
+                            <div id="playerHPBar" class="hp-fill" th:style="'width:' + (${data.playerHp} * 100.0 / ${data.playerMaxHp}) + '%;'"></div>
+                        </div>
+                    </div>
+                    <div class="hp-block enemy-block">
+                        <div id="enemyHPText" th:text="'HP: ' + ${data.enemyHp} + '/' + ${data.enemyMaxHp}">HP: 80/80</div>
+                        <div class="hp-bar">
+                            <div id="enemyHPBar" class="hp-fill" th:style="'width:' + (${data.enemyHp} * 100.0 / ${data.enemyMaxHp}) + '%;'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chars">
+                    <div id="playerChar" class="char" th:text="${data.playerIcon}">🧙‍♂️</div>
+                    <div id="enemyChar" class="char" th:text="${data.enemyIcon}">👹</div>
+                </div>
+
+                <div id="actionButtons" class="actions">
+                    <button id="attackBtn" class="btn action">⚔️ Tấn công</button>
+                    <button id="useItemBtn" class="btn action">💊 Dùng Potion</button>
+                    <button id="fleeBtn" class="btn action btn-danger">🏃 Bỏ chạy</button>
+                </div>
+
+                <div id="potionList" class="actions potion-list hidden">
+                    <th:block th:each="potion : ${data.potions}">
+                        <button class="btn btn-potion" 
+                                th:data-item-id="${potion.userItemId}" 
+                                th:data-heal="${potion.heal}"
+                                th:disabled="${potion.quantity <= 0}">
+                            <span th:text="${potion.name}">Potion</span>
+                            (<span class="potion-qty" th:text="${potion.quantity}">0</span>)
+                        </button>
+                    </th:block>
+                    <button id="cancelPotionBtn" class="btn btn-secondary">Hủy</button>
+                </div>
+
+                <div id="resultScreen" class="actions hidden">
+                    <h2 id="resultTitle">CHIẾN THẮNG</h2>
+                    <div id="resultRewards"></div>
+                    <button id="backToMapBtn" class="btn btn-primary" onclick="location.href='/minigame'">
+                        Về bản đồ
+                    </button>
+                </div>
+
+                <div id="battleLog" class="battle-log">Trận chiến bắt đầu!</div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script th:src="@{/js/battle.js}"></script>
+</body>
+</html>

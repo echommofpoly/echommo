@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace - EchoMMO</title>
+	<link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/inventory.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+     <style>
+         .rarity-badge { padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; color: white; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); display: inline-block; margin-bottom: 5px;}
+         .rarity-common { background: #9ca3af; }
+         .rarity-rare { background: #3b82f6; }
+         .rarity-epic { background: #a855f7; }
+         .rarity-legendary { background: #f59e0b; }
+
+         .notification { position: fixed; top: 20px; right: 20px; padding: 1rem 1.5rem; color: white; border-radius: 8px; z-index: 9999; animation: slideIn 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+         .notification-success { background: #10b981; }
+         .notification-error { background: #ef4444; }
+         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+         @keyframes slideOut { to { transform: translateX(100%); opacity: 0; } }
+
+         .btn { padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; transition: background 0.3s; font-weight: bold; }
+         .btn-primary { background: #3b82f6; color: white; } .btn-primary:hover { background: #2563eb; }
+         .btn-buy { background: #10b981; color: white; width: 100%; margin-top: 10px; } .btn-buy:hover { background: #059669; }
+         .btn-filter { background: #6b7280; color: white; } .btn-filter:hover { background: #4b5563; }
+         .btn-secondary { background: #6b7280; color: white; } .btn-secondary:hover { background: #4b5563; }
+
+         .marketplace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+         .filters { margin-bottom: 2rem; background: var(--bg-card); padding: 1rem; border-radius: 12px; }
+         .filter-form { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+         .search-input { flex-grow: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #374151; background: #1f2937; color: white; min-width: 200px;}
+         .filter-select, .filter-input { padding: 8px 12px; border-radius: 6px; border: 1px solid #374151; background: #1f2937; color: white; }
+         .filter-input { max-width: 120px; }
+
+         .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; }
+         .listing-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; transition: all 0.3s; position: relative; border: 1px solid #2d3748;}
+         .listing-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1); }
+         .listing-image { height: 160px; background: linear-gradient(145deg, #1e293b, #0f172a); display: flex; align-items: center; justify-content: center; position: relative; }
+         .listing-image img { max-width: 90px; max-height: 90px; object-fit: contain; }
+         .listing-image .rarity-badge { position: absolute; top: 10px; left: 10px; }
+         .listing-info { padding: 1rem; }
+         .listing-info h3 { margin: 0 0 0.5rem 0; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+         .seller { font-size: 0.85rem; color: #a0aec0; margin-bottom: 0.5rem; }
+         .item-stats span { margin-right: 10px; font-size: 0.85em; color: #a0aec0; }
+         .listing-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; }
+         .quantity { font-size: 0.9em; color: #cbd5e0; }
+         .price { font-size: 1.1em; color: #f59e0b; font-weight: bold; }
+         .listing-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; color: white; text-transform: uppercase; }
+         .badge-player { background: #3b82f6; }
+         .badge-admin { background: #ef4444; }
+
+         .pagination { text-align: center; margin-top: 2rem; }
+         .page-btn { background: #374151; color: #d1d5db; padding: 8px 15px; border-radius: 6px; text-decoration: none; margin: 0 5px; }
+         .page-btn:hover { background: #4b5563; }
+         .page-info { color: #a0aec0; }
+
+    </style>
+</head>
+<body>
+<div class="home-container">
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="layout">
+        <div th:replace="~{fragments/sidebar :: sidebar (activePage='marketplace')}"></div>
+
+        <main class="main-content">
+            <div class="marketplace-header">
+                <h1><i class="fas fa-store"></i> Marketplace</h1>
+                <button class="btn btn-primary" onclick="location.href='/marketplace/create'">
+                    <i class="fas fa-plus"></i> Đăng bán
+                </button>
+            </div>
+
+            <div class="filters">
+                <form method="get" action="/marketplace" class="filter-form">
+                    <input type="text" name="search" placeholder="Tìm kiếm vật phẩm..."
+                           th:value="${search}" class="search-input">
+
+                    <select name="category" class="filter-select">
+                        <option value="" th:selected="${category == ''}">Tất cả loại</option>
+                        <option value="weapon" th:selected="${category == 'weapon'}">Vũ khí</option>
+                        <option value="armor" th:selected="${category == 'armor'}">Giáp</option>
+                        <option value="potion" th:selected="${category == 'potion'}">Potion</option>
+                        <option value="resource" th:selected="${category == 'resource'}">Nguyên liệu</option>
+                    </select>
+
+                    <input type="number" name="maxPrice" placeholder="Giá tối đa"
+                           th:value="${maxPrice == null or maxPrice.compareTo(new java.math.BigDecimal('999999999999.99')) >= 0 ? '' : maxPrice}" 
+                           class="filter-input" min="0" step="0.01">
+
+                    <button type="submit" class="btn btn-filter">
+                        <i class="fas fa-search"></i> Lọc
+                    </button>
+                     <a th:href="@{/marketplace}" class="btn btn-secondary">Xóa lọc</a>
+                </form>
+            </div>
+
+            <div class="listings-grid">
+                <div th:if="${listings.empty}" style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 2rem;">
+                     Không tìm thấy vật phẩm nào.
+                </div>
+                <div th:each="listing : ${listings}" class="listing-card">
+                     <div class="listing-badge" th:classappend="${#strings.equalsIgnoreCase(listing.priceType,'Admin') ? 'badge-admin' : (#strings.equalsIgnoreCase(listing.priceType,'System') ? 'badge-system' : 'badge-player')}">
+                         <span th:text="${listing.priceType}"></span>
+                     </div>
+
+                    <div class="listing-image">
+                        <img th:src="${listing.imageUrl != null ? listing.imageUrl : '/images/items/default.png'}"
+                             th:alt="${listing.itemName}">
+                        <span class="rarity-badge" th:classappend="${'rarity-' + (#strings.toLowerCase(listing.itemRarity ?: 'common'))}">
+                            <span th:text="${listing.itemRarity ?: 'Common'}"></span>
+                        </span>
+                    </div>
+
+                    <div class="listing-info">
+                        <h3 th:text="${listing.itemName}">Item Name</h3>
+                        <p class="seller">Người bán: <span th:text="${listing.sellerName}">Seller</span></p>
+
+                        <div class="item-stats">
+                            <span th:if="${listing.gameAtk != null and listing.gameAtk > 0}">⚔️ <span th:text="${listing.gameAtk}">0</span></span>
+                            <span th:if="${listing.gameDef != null and listing.gameDef > 0}">🛡️ <span th:text="${listing.gameDef}">0</span></span>
+                            <span th:if="${listing.gameHeal != null and listing.gameHeal > 0}">❤️ <span th:text="${listing.gameHeal}">0</span></span>
+                        </div>
+
+                        <div class="listing-footer">
+                            <div class="quantity">x<span th:text="${listing.quantity}">1</span></div>
+                            <div class="price">
+                                <i class="fas fa-coins"></i> <span th:text="${#numbers.formatDecimal(listing.price, 1, 'COMMA', 2, 'POINT')}">100.00</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-buy"
+                                th:if="${listing.sellerId != #authentication.principal.user.userId}"
+                                th:onclick="'buyItem(' + ${listing.listingId} + ')'">
+                            <i class="fas fa-shopping-cart"></i> Mua ngay
+                        </button>
+                         <button class="btn btn-secondary" style="width: 100%; margin-top: 5px;" disabled
+                                 th:if="${listing.sellerId == #authentication.principal.user.userId}">
+                             Vật phẩm của bạn
+                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination" th:if="${totalPages > 1}">
+                <a th:if="${currentPage > 0}"
+                   th:href="@{/marketplace(page=${currentPage - 1}, search=${search}, category=${category}, maxPrice=${maxPrice})}"
+                   class="page-btn">
+                    <i class="fas fa-chevron-left"></i> Trước
+                </a>
+
+                 <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                     <a th:if="${i == currentPage}" class="page-btn active" style="background: #10b981; color: white;" th:text="${i + 1}"></a>
+                     <a th:unless="${i == currentPage}"
+                        th:href="@{/marketplace(page=${i}, search=${search}, category=${category}, maxPrice=${maxPrice})}"
+                        class="page-btn" th:text="${i + 1}"></a>
+                 </th:block>
+
+                <a th:if="${currentPage < totalPages - 1}"
+                   th:href="@{/marketplace(page=${currentPage + 1}, search=${search}, category=${category}, maxPrice=${maxPrice})}"
+                   class="page-btn">
+                    Sau <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+     <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/marketplace.js}"></script>
+</body>
+</html>

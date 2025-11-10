@@ -1,0 +1,104 @@
+/* battle.css */
+.battle-container { 
+    padding: 10px; 
+}
+.battle-area {
+    background: linear-gradient(180deg, #374151, #1f2937);
+    padding: 18px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.hp-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.hp-block { 
+    width: 48%;
+    background: #111827;
+    padding: 8px;
+    border-radius: 8px;
+}
+.hp-bar {
+    background: #3a3a3a;
+    height: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.hp-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #10b981, #6ee7b7);
+    transition: width .3s;
+}
+.enemy-block .hp-fill {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.chars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px 40px;
+    font-size: 64px;
+    min-height: 100px;
+}
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.action {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #4b5563;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.action:hover {
+    background: #6b7280;
+}
+.action:disabled {
+    background: #333;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.btn-danger { background: #ef4444; }
+.btn-danger:hover { background: #dc2626; }
+.btn-secondary { background: #6b7280; }
+.btn-potion { background: #a855f7; }
+
+.hidden {
+    display: none !important;
+}
+.battle-log {
+    margin-top: 12px;
+    background: rgba(0,0,0,0.25);
+    padding: 10px;
+    border-radius: 8px;
+    height: 80px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    color: #d1d5db;
+}
+
+#resultScreen h2 {
+    color: #6ee7b7;
+    width: 100%;
+    text-align: center;
+}
+#resultScreen #resultRewards {
+    width: 100%;
+    text-align: center;
+    color: #f59e0b;
+    margin-bottom: 1rem;
+}

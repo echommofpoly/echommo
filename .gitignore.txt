@@ -1,0 +1,41 @@
+#---------------------------------------------------
+# Project: Spring Boot / Java / Maven / Gradle
+#---------------------------------------------------
+
+# Build/Target Files (Maven/Gradle)
+/target/
+/build/
+bin/
+*.jar
+*.war
+*.zip
+*.tar.gz
+
+# Maven wrapper files
+.mvn/wrapper/maven-wrapper.log
+
+# Logs
+/logs/
+*.log
+npm-debug.log*
+
+# IDE: Eclipse/STS (Bạn cần những dòng này)
+.classpath
+.project
+.settings/
+/settings/
+
+# IDE: IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IDE: VS Code
+.vscode/
+
+# Temporary and Operating System Files
+*~
+*.swp
+.DS_Store
+Thumbs.db
